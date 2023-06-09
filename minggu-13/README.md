@@ -194,7 +194,7 @@ Isikan default host dengan nama domain mail server.
 ```
 ...
 // For example %n = mail.domain.tld, %t = domain.tld
-$config['default_host'] = 'kampus-06.takehome.com';
+$config['default_host'] = 'mail.kampus-06.takehome.com';
 ...
 ```
 
@@ -202,7 +202,7 @@ Ganti smtp server dengan nama domain mail server.
 ```
 ...
 // For example %n = mail.domain.tld, %t = domain.tld
-$config['smtp_server'] = 'kampus-06.takehome.com';
+$config['smtp_server'] = 'mail.kampus-06.takehome.com';
 ...
 ```
 ![image 16](assets/image16.png)
@@ -273,15 +273,39 @@ cd /etc/apache2/sites-available
 sudo touch mail.conf
 sudo nano mail.conf
 ```
-![image 24](assets/image24.png)
+
+```
+<VirtualHost *:80>
+        ServerName mail.kampus-06.takehome.com
+        DocumentRoot /usr/share/roundcube
+</VirtualHost>
+```
 
 Disable apache default config dan enable kan mail config.
 ```
-a2dissite 000-default.conf
-a2ensite mail.conf
+sudo a2dissite 000-default.conf
+sudo a2ensite mail.conf
 ```
 
 Restart apache service.
 ```
 systemctl restart apache2
 ```
+
+### List IP pada `/etc/hosts`
+![image 24](assets/image24.png)
+
+### File forward pada `/var/cache/bind/db.kampus-06.takehome-forward`
+![image 28](assets/image28.png)
+
+<br>
+
+# Testing
+Selanjutnya buka web browser pada sisi client dan masukkan domain dari mail server, maka akan muncul interface dari roundcube. Lalu login menggunakan salah satu user yang telah dibuat.
+![image 25](assets/image25.png)
+
+Kemudian mengirimkan sebuah pesan ke user lainnya yang berbeda domainnya.
+![image 26](assets/image26.png)
+
+Berikut tampilan pesan yang berhasil dikirim di inbox user lainnya.
+![image 27](assets/image27.png)
